@@ -1,61 +1,71 @@
 package com.rahulsoni0.knownews.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.rahulsoni0.knownews.R;
 import com.rahulsoni0.knownews.adapter.CategoryViewPagerAdapter;
 import com.rahulsoni0.knownews.databinding.ActivityMainBinding;
+import com.rahulsoni0.knownews.util.InternetManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActivityMainBinding binding;
     CategoryViewPagerAdapter categoryViewPagerAdapter;
     ActionBarDrawerToggle toggle;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    TabItem headlines, sports, technology, science, politics, entertainment;
+    private HandlerThread mHandlerThread;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        tabLayout = findViewById(R.id.TabLayoutCategory);
-        viewPager = findViewById(R.id.vewPagerCategory);
-        //tabItems
-        headlines = findViewById(R.id.tabHeadlines);
-        sports = findViewById(R.id.tabSports);
-        technology = findViewById(R.id.tabTechnology);
-        science = findViewById(R.id.tabScience);
-        politics = findViewById(R.id.tabPolitics);
-        entertainment = findViewById(R.id.tabEntertainment);
 
-        toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //internet check
+        mHandlerThread = new HandlerThread("HandlerThread");
+        mHandlerThread.start();
+        mHandler = new Handler(mHandlerThread.getLooper());
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (InternetManager.isConnected(MainActivity.this)) {
+                    //gone no-internet layout
+                    //show frame layout
+                } else {
+                    //gone frame layout
+                    //show no-internet layout
+                }
+            }
+        }, 1000);
+
+
+        setSupportActionBar(binding.contentMain.toolbar);
+        toggle = new ActionBarDrawerToggle(MainActivity.this, binding.drawerLayout, binding.contentMain.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         binding.drawerLayout.addDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
+
         binding.navView.setNavigationItemSelectedListener(this);
+        categoryViewPagerAdapter = new CategoryViewPagerAdapter(this, getSupportFragmentManager(), binding.contentMain.TabLayoutCategory.getTabCount());
 
-        categoryViewPagerAdapter = new CategoryViewPagerAdapter(this, getSupportFragmentManager(), tabLayout.getTabCount());
 
-        viewPager.setAdapter(categoryViewPagerAdapter);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binding.contentMain.vewPagerCategory.setAdapter(categoryViewPagerAdapter);
+        binding.contentMain.TabLayoutCategory.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                binding.contentMain.vewPagerCategory.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -70,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        binding.contentMain.vewPagerCategory.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.contentMain.TabLayoutCategory));
 
 
     }
@@ -82,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "Clicked Home", Toast.LENGTH_SHORT).show();
         }
         if (item.getItemId() == R.id.Liked) {
-            Toast.makeText(this, "Clicked Liked", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(MainActivity.this, SavedListActivity.class);
+            startActivity(i);
+//            Toast.makeText(this, "Clicked Liked", Toast.LENGTH_SHORT).show();
         }
         if (item.getItemId() == R.id.About) {
             Toast.makeText(this, "Clicked About", Toast.LENGTH_SHORT).show();
@@ -93,5 +105,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return false;
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
     }
 }
