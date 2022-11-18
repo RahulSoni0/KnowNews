@@ -19,6 +19,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHeadlines"
             android:layout_width="match_parent"
+            android:nestedScrollingEnabled="false"
             android:layout_height="match_parent"
             android:scrollbarStyle="insideOverlay"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

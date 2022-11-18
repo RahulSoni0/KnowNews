@@ -59,4 +59,7 @@ dependencies {
   
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    //
+    //LottieFiles for SplashScreen
+    implementation 'com.airbnb.android:lottie:4.2.0'
 }

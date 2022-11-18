@@ -3,6 +3,8 @@ package com.rahulsoni0.knownews.ui.fragment;
 import static com.rahulsoni0.knownews.util.Constants.API_KEY;
 import static com.rahulsoni0.knownews.util.Constants.BASE_URL;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rahulsoni0.knownews.R;
 import com.rahulsoni0.knownews.adapter.NewsAdapter;
 import com.rahulsoni0.knownews.api.NewsApiInterface;
 import com.rahulsoni0.knownews.api.NewsRetrofitClient;
@@ -42,6 +45,7 @@ public class HeadlinesFragment extends Fragment {
     NewsAdapter adapter;
     List<ArticleModel> headlinesList = new ArrayList<>();
     List<SavedListEntityModel> savedNews = new ArrayList<>();
+    Dialog d ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,13 @@ public class HeadlinesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         SavedListDatabase db = SavedListDatabase.getInstance(getContext());
         List<SavedListEntityModel> sn = db.savedListDao().getAllNews();
+
+        d = new Dialog(getContext());
+        d.setContentView(R.layout.loadingdialog);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        d.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        d.setCancelable(false);
+        d.show();
         savedNews.addAll(sn);
         initData(1);
         setUpPagination(true);
@@ -78,9 +89,11 @@ public class HeadlinesFragment extends Fragment {
                     headlinesList.addAll(headlinesData);
                     adapter.notifyDataSetChanged();
                     Log.d("@@@@@", "onResponse: " + headlinesData.toString());
+                    d.dismiss();
 
                 } else {
-                    Toast.makeText(getContext(), "ff", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    d.dismiss();
                 }
             }
 
@@ -88,6 +101,7 @@ public class HeadlinesFragment extends Fragment {
             public void onFailure(Call<NewsContentModel> call, Throwable t) {
                 Log.d("@@@@@", "onResponse: " + t.getLocalizedMessage());
                 Toast.makeText(getActivity().getBaseContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                d.dismiss();
             }
         });
 

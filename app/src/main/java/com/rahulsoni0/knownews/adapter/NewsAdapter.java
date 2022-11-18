@@ -1,5 +1,6 @@
 package com.rahulsoni0.knownews.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.rahulsoni0.knownews.cache.SavedListDatabase;
 import com.rahulsoni0.knownews.cache.SavedListEntityModel;
 import com.rahulsoni0.knownews.databinding.NewsItemBinding;
 import com.rahulsoni0.knownews.model.ArticleModel;
+import com.rahulsoni0.knownews.ui.webview.WebViewActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -55,7 +57,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
 
     public class NewsAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView newsImage , heart;
+        private ImageView newsImage , heart , sharebtn;
         private TextView titleTv, sourceTv;
 
         public NewsAdapterViewHolder(@NonNull View itemView) {
@@ -64,11 +66,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             heart = itemView.findViewById(R.id.btnItemLiked);
             titleTv = itemView.findViewById(R.id.tvItemNewsTitle);
             sourceTv = itemView.findViewById(R.id.tvItemNewsSource);
+            sharebtn = itemView.findViewById(R.id.btnItemShare);
 
 
             newsImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), WebViewActivity.class);
+                    intent.putExtra("url", newsList.get(getAdapterPosition()).getUrl());
+                    itemView.getContext().startActivity(intent);
                     Toast.makeText(itemView.getContext(), "Redirecting.....", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -78,6 +84,22 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
                 public void onClick(View v) {
                     heart.setImageResource(R.drawable.red_heart);
                     addSavedList(newsList.get(getAdapterPosition()));
+                }
+            });
+            sharebtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                    /*This will be the actual content you wish you share.*/
+                    String shareBody = " 👋🏻 hey , I found this news on KnowNews App . \n check this out : "
+                            + newsList.get(getAdapterPosition()).getUrl();
+                    /*The type of the content is text, obviously.*/
+                    intent.setType("text/plain");
+                    /*Applying information Subject and Body.*/
+                    intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Shared from KnowNews App");
+                    intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                    /*Fire!*/
+                    itemView.getContext().startActivity(Intent.createChooser(intent, shareBody));
                 }
             });
         }

@@ -3,6 +3,8 @@ package com.rahulsoni0.knownews.ui.fragment;
 import static com.rahulsoni0.knownews.util.Constants.API_KEY;
 import static com.rahulsoni0.knownews.util.Constants.BASE_URL;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rahulsoni0.knownews.R;
 import com.rahulsoni0.knownews.adapter.NewsAdapter;
 import com.rahulsoni0.knownews.api.NewsApiInterface;
 import com.rahulsoni0.knownews.api.NewsRetrofitClient;
@@ -40,6 +43,7 @@ public class SportsFragment extends Fragment {
     NewsAdapter adapter;
     List<ArticleModel> newsDataList = new ArrayList<>();
     List<SavedListEntityModel> savedNews = new ArrayList<>();
+    Dialog d;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,12 @@ public class SportsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        d = new Dialog(getContext());
+        d.setContentView(R.layout.loadingdialog);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        d.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        d.setCancelable(false);
+        d.show();
 
         initRv();
         initData(1);
@@ -93,7 +103,7 @@ public class SportsFragment extends Fragment {
 
     private void initData(int page) {
         NewsApiInterface newsApiInterface = NewsRetrofitClient.getNewsClient(BASE_URL);
-        Call<NewsContentModel> call = newsApiInterface.getGeneralNews(page, "sports OR games OR fifa OR cricket OR football OR volleyball OR soccer OR olymics OR common wealths", "en", "popularity", API_KEY);
+        Call<NewsContentModel> call = newsApiInterface.getGeneralNews(page, "sports OR games OR fifa OR cricket OR football OR volleyball OR soccer OR olymics OR common wealths", "en", "relevancy", API_KEY);
         call.enqueue(new Callback<NewsContentModel>() {
             @Override
             public void onResponse(Call<NewsContentModel> call, Response<NewsContentModel> response) {
@@ -103,9 +113,11 @@ public class SportsFragment extends Fragment {
                     newsDataList.addAll(headlinesData);
                     adapter.notifyDataSetChanged();
                     Log.d("@@@@@", "onResponse: " + headlinesData.toString());
+                    d.dismiss();
 
                 } else {
-                    Toast.makeText(getContext(), "ff", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+                    d.dismiss();
                 }
             }
 
@@ -113,6 +125,7 @@ public class SportsFragment extends Fragment {
             public void onFailure(Call<NewsContentModel> call, Throwable t) {
                 Log.d("@@@@@", "onResponse: " + t.getLocalizedMessage());
                 Toast.makeText(getActivity().getBaseContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                d.dismiss();
             }
         });
     }
