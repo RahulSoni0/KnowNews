@@ -64,7 +64,6 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.View
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     SavedListDatabase db = SavedListDatabase.getInstance(itemView.getContext());
                     SavedListEntityModel s = newslist.get(getLayoutPosition());
                     newslist.remove(getLayoutPosition());
