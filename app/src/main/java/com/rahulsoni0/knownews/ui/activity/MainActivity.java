@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         d.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         d.setCancelable(false);
 
+
         networkStateReceiver = new NetworkStateReceiver();
         networkStateReceiver.addListener(MainActivity.this);
         this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
