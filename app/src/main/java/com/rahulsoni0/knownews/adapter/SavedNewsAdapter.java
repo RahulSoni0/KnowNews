@@ -57,6 +57,7 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.View
 
         }
 
+
         public void setData(String urlToImage, String title, String source) {
             titleTv.setText(title);
             sourceTv.setText(source);
