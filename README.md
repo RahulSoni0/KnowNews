@@ -5,7 +5,7 @@
 <br>
 
 <div align="center">
-<img width="84px" height = "84px" src="https://user-images.githubusercontent.com/89024718/141686169-7b999712-0173-428a-8e86-e8a5b40cb34e.png" alt="cover" />
+<img width="128px" height = "128px" src="https://github.com/RahulSoni0/KnowNews/blob/main/a/ic_app_logo.png" alt="cover" />
 </div>
 <br><br>
 
