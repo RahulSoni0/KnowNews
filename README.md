@@ -21,7 +21,7 @@
 
 <br>
 <div align="center">
-<img width="20%" height = "50%" src="https://user-images.githubusercontent.com/89024718/141685925-45283dfb-c94a-462e-8169-93f14b89bb61.gif" alt="cover" />
+<img width="20%" height = "50%" src="https://github.com/RahulSoni0/KnowNews/blob/main/a/gif_app_tour.gif" alt="cover" />
 </div>
 <br>
 <br>
