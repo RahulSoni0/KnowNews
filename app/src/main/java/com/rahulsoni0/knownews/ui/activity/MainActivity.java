@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //internet check
 
-
         d = new Dialog(MainActivity.this);
         d.setContentView(R.layout.no_internet_dialog);
         d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
