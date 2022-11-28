@@ -12,10 +12,15 @@
 
 
 ## Overview : 
+ ### 🚀 Features
 
-<h4>
- content here
-<br><br>
+- A professional level News app which uses Retrofit, RoomDB, Database Caching, Paging and many more modern Practices
+- Fetched Data related to various news categories from Newsorg Api Using Retrofit 
+- Implemented Caching of Saved news list using RoomDB.
+- Implemented Broadcasts to manage various events like internet status.
+- Used Advanced ui components like viewPager , TabLayout , RecyclerView , Navigation Drawer . 
+
+
 
 ## Application Overview
 
