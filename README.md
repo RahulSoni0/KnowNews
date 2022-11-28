@@ -34,7 +34,7 @@
  
 ## Download Application:
 
-- <a href="link_here" title="https://github.com/RahulSoni0/KnowNews/blob/main/app/release/app-release.apk" style="background-color:#FFFFFF;color:#000000;text-decoration:none">KnowNews apk</a>
+- <a href="https://github.com/RahulSoni0/KnowNews/blob/main/app/release/app-release.apk" title="https://github.com/RahulSoni0/KnowNews/blob/main/app/release/app-release.apk" style="background-color:#FFFFFF;color:#000000;text-decoration:none">KnowNews apk</a>
 
 ## Credits:
 <h5>Glide Library - https://github.com/bumptech/glide</h5>
